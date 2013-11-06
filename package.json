@@ -1,0 +1,28 @@
+{
+  "name": "coffeelint-variable-scope",
+  "version": "0.0.0",
+  "description": "CoffeeLint rule that warn you when you accidentally overwrite outer scope variable",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fragphace/coffeelint-variable-scope.git"
+  },
+  "keywords": [
+    "coffeelint",
+    "coffeescript",
+    "scope"
+  ],
+  "author": "Paweł Maciejewski <fragphace@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fragphace/coffeelint-variable-scope/issues"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-watch": "~0.5.3"
+  }
+}
