@@ -7,14 +7,22 @@
     VariableScopeRule.prototype.rule = {
       name: 'variable_scope',
       level: 'warn',
-      message: 'You accidentally overwrote variables',
-      description: 'Warns you when you accidentally overwrite outer scope variable'
+      message: 'Outer scope variable overwrite',
+      description: 'To never overwrite outer scope variable by accident'
     };
 
     VariableScopeRule.prototype.lintAST = function(node, astApi) {
-      var errors;
+      var error, errors, _i, _len;
       errors = this.lintNode(node, {});
-      return console.log(errors[3]);
+      for (_i = 0, _len = errors.length; _i < _len; _i++) {
+        error = errors[_i];
+        this.errors.push(astApi.createError({
+          context: error.variable,
+          lineNumber: error.upper.locationData.first_line + 1,
+          lineNumberEnd: error.lower.locationData.first_line + 1
+        }));
+      }
+      return false;
     };
 
     VariableScopeRule.prototype.lintNode = function(node, upperAssigns, level) {

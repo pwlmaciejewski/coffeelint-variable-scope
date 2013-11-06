@@ -2,12 +2,17 @@ module.exports = class VariableScopeRule
     rule: 
         name: 'variable_scope'
         level : 'warn'
-        message : 'You accidentally overwrote variables'
-        description : 'Warns you when you accidentally overwrite outer scope variable'
+        message : 'Outer scope variable overwrite'
+        description : 'To never overwrite outer scope variable by accident'
 
     lintAST: (node, astApi) ->
-        errors = @lintNode(node, {})
-        console.log errors[3]
+        errors = @lintNode node, {}
+        for error in errors
+            @errors.push astApi.createError
+                context: error.variable
+                lineNumber: error.upper.locationData.first_line + 1
+                lineNumberEnd: error.lower.locationData.first_line + 1
+        false
 
     lintNode: (node, upperAssigns, level = 1) ->
         errors = []
