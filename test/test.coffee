@@ -51,3 +51,13 @@ suite 'lintNode().', ->
 
         test 'There is only one error', ->
             assert.equal @errors.length, 1
+
+    suite 'Last upper and first lower.', ->
+        setup ->
+            source = fs.readFileSync("#{__dirname}/fixture/lastUpperFirstLower.coffee").toString()
+            ast = CoffeeScript.nodes source
+            @errors = @rule.lintNode ast
+
+        test 'Shows correctly', ->
+            assert.equal @errors[0].upper.locationData.first_line, 1
+            assert.equal @errors[0].lower.locationData.first_line, 4

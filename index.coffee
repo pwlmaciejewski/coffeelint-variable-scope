@@ -7,21 +7,23 @@ module.exports = class VariableScopeRule
 
     lintAST: (node, astApi) ->
         errors = @lintNode(node, {})
-        console.log errors[0]
-        console.log errors[0].lower.variable
+        console.log errors[3]
 
     lintNode: (node, upperAssigns, level = 1) ->
         errors = []
         codes = @nodeCodes node
         assigns = @nodeAssigns node
-        assign.scope_level = level for name, assign of assigns
+        for name, assignArr of assigns
+            assign.scope_level = level for assign in assignArr
         for name, upperAssign of upperAssigns
-            if @assignName(upperAssign) of assigns 
+            if name of assigns 
                 errors.push
                     variable: name
                     upper: upperAssign
-                    lower: assigns[name]
+                    lower: assigns[name][0]
             else assigns[name] = upperAssign
+        for name, assignArr of assigns
+            if Array.isArray(assignArr) then assigns[name] = assignArr[assignArr.length - 1]
         errors = errors.concat(@lintNode(code.body, assigns, level + 1)) for code in codes
         errors
 
@@ -37,7 +39,8 @@ module.exports = class VariableScopeRule
             if child.constructor.name isnt 'Assign' then return
             if child.context is 'object' then return
             if child.variable.properties.length then return
-            assigns[@assignName(child)] = child
+            unless assigns[@assignName(child)] then assigns[@assignName(child)] = []
+            assigns[@assignName(child)].push child
         assigns
 
     assignName: (assign) -> assign.variable.base.value

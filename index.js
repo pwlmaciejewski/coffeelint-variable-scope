@@ -14,12 +14,11 @@
     VariableScopeRule.prototype.lintAST = function(node, astApi) {
       var errors;
       errors = this.lintNode(node, {});
-      console.log(errors[0]);
-      return console.log(errors[0].lower.variable);
+      return console.log(errors[3]);
     };
 
     VariableScopeRule.prototype.lintNode = function(node, upperAssigns, level) {
-      var assign, assigns, code, codes, errors, name, upperAssign, _i, _len;
+      var assign, assignArr, assigns, code, codes, errors, name, upperAssign, _i, _j, _len, _len1;
       if (level == null) {
         level = 1;
       }
@@ -27,23 +26,32 @@
       codes = this.nodeCodes(node);
       assigns = this.nodeAssigns(node);
       for (name in assigns) {
-        assign = assigns[name];
-        assign.scope_level = level;
+        assignArr = assigns[name];
+        for (_i = 0, _len = assignArr.length; _i < _len; _i++) {
+          assign = assignArr[_i];
+          assign.scope_level = level;
+        }
       }
       for (name in upperAssigns) {
         upperAssign = upperAssigns[name];
-        if (this.assignName(upperAssign) in assigns) {
+        if (name in assigns) {
           errors.push({
             variable: name,
             upper: upperAssign,
-            lower: assigns[name]
+            lower: assigns[name][0]
           });
         } else {
           assigns[name] = upperAssign;
         }
       }
-      for (_i = 0, _len = codes.length; _i < _len; _i++) {
-        code = codes[_i];
+      for (name in assigns) {
+        assignArr = assigns[name];
+        if (Array.isArray(assignArr)) {
+          assigns[name] = assignArr[assignArr.length - 1];
+        }
+      }
+      for (_j = 0, _len1 = codes.length; _j < _len1; _j++) {
+        code = codes[_j];
         errors = errors.concat(this.lintNode(code.body, assigns, level + 1));
       }
       return errors;
@@ -75,7 +83,10 @@
         if (child.variable.properties.length) {
           return;
         }
-        return assigns[_this.assignName(child)] = child;
+        if (!assigns[_this.assignName(child)]) {
+          assigns[_this.assignName(child)] = [];
+        }
+        return assigns[_this.assignName(child)].push(child);
       });
       return assigns;
     };
