@@ -23,6 +23,9 @@
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-coffee": "~0.7.0",
-    "grunt-contrib-watch": "~0.5.3"
+    "grunt-contrib-watch": "~0.5.3",
+    "chai": "~1.8.1",
+    "mocha": "~1.14.0",
+    "coffee-script": "~1.6.3"
   }
 }
