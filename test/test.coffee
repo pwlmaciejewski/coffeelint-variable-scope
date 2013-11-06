@@ -33,3 +33,21 @@ suite 'lintNode().', ->
         test 'Scope levels for third error are correct', ->
             assert.equal @errors[2].upper.scope_level, 2
             assert.equal @errors[2].lower.scope_level, 4
+
+    suite 'Object literal.', ->
+        setup ->
+            source = fs.readFileSync("#{__dirname}/fixture/objectLiteral.coffee").toString()
+            ast = CoffeeScript.nodes source
+            @errors = @rule.lintNode ast
+
+        test 'There is only one error', ->
+            assert.equal @errors.length, 1
+
+    suite 'Object property.', ->
+        setup ->
+            source = fs.readFileSync("#{__dirname}/fixture/objectProperty.coffee").toString()
+            ast = CoffeeScript.nodes source
+            @errors = @rule.lintNode ast
+
+        test 'There is only one error', ->
+            assert.equal @errors.length, 1

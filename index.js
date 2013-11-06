@@ -12,31 +12,24 @@
     };
 
     VariableScopeRule.prototype.lintAST = function(node, astApi) {
-      return console.log(this.lintNode(node, {})[0]);
-    };
-
-    VariableScopeRule.prototype.assignName = function(assign) {
-      return assign.variable.base.value;
+      var errors;
+      errors = this.lintNode(node, {});
+      console.log(errors[0]);
+      return console.log(errors[0].lower.variable);
     };
 
     VariableScopeRule.prototype.lintNode = function(node, upperAssigns, level) {
-      var assigns, code, codes, errors, name, upperAssign, _i, _len,
-        _this = this;
+      var assign, assigns, code, codes, errors, name, upperAssign, _i, _len;
       if (level == null) {
         level = 1;
       }
       errors = [];
-      codes = [];
-      assigns = {};
-      node.traverseChildren(false, function(child) {
-        switch (child.constructor.name) {
-          case 'Code':
-            return codes.push(child);
-          case 'Assign':
-            child.scope_level = level;
-            return assigns[_this.assignName(child)] = child;
-        }
-      });
+      codes = this.nodeCodes(node);
+      assigns = this.nodeAssigns(node);
+      for (name in assigns) {
+        assign = assigns[name];
+        assign.scope_level = level;
+      }
       for (name in upperAssigns) {
         upperAssign = upperAssigns[name];
         if (this.assignName(upperAssign) in assigns) {
@@ -54,6 +47,41 @@
         errors = errors.concat(this.lintNode(code.body, assigns, level + 1));
       }
       return errors;
+    };
+
+    VariableScopeRule.prototype.nodeCodes = function(node) {
+      var codes,
+        _this = this;
+      codes = [];
+      node.traverseChildren(false, function(child) {
+        if (child.constructor.name === 'Code') {
+          return codes.push(child);
+        }
+      });
+      return codes;
+    };
+
+    VariableScopeRule.prototype.nodeAssigns = function(node) {
+      var assigns,
+        _this = this;
+      assigns = {};
+      node.traverseChildren(false, function(child) {
+        if (child.constructor.name !== 'Assign') {
+          return;
+        }
+        if (child.context === 'object') {
+          return;
+        }
+        if (child.variable.properties.length) {
+          return;
+        }
+        return assigns[_this.assignName(child)] = child;
+      });
+      return assigns;
+    };
+
+    VariableScopeRule.prototype.assignName = function(assign) {
+      return assign.variable.base.value;
     };
 
     return VariableScopeRule;
