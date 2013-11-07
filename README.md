@@ -1,6 +1,5 @@
-coffeelint-variable-scope
-[![Build Status](https://secure.travis-ci.org/fragphace/coffeelint-variable-scope.png?branch=master)](http://travis-ci.org/fragphace/coffeelint-variable-scope)
-=========================
+# coffeelint-variable-scope [![Build Status](https://secure.travis-ci.org/fragphace/coffeelint-variable-scope.png?branch=master)](http://travis-ci.org/fragphace/coffeelint-variable-scope)
+
 
 [CoffeeLint](http://www.coffeelint.org/) rule that warns you about overwriting outer scope variable.
 
