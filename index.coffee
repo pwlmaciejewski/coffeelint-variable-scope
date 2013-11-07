@@ -7,7 +7,8 @@ module.exports = class VariableScopeRule
         scopeDiff: 1
 
     lintAST: (node, astApi) ->
-        errors = @lintNode node, {}
+        config = astApi.config[@rule.name]
+        errors = @lintNode node, {}, @scopeDiffFilter(config.scopeDiff)
         for error in errors
             @errors.push astApi.createError
                 context: error.variable
@@ -15,22 +16,26 @@ module.exports = class VariableScopeRule
                 lineNumberEnd: error.lower.locationData.first_line + 1
         false
 
-    lintNode: (node, upperAssigns, level = 1) ->
+    scopeDiffFilter: (diff) ->
+        (lower, upper) -> lower.scope_level - upper.scope_level >= diff
+
+    lintNode: (node, upperAssigns, filter, level = 1) ->
+        filter = filter or -> true
         errors = []
         codes = @nodeCodes node
         assigns = @nodeAssigns node
         for name, assignArr of assigns
             assign.scope_level = level for assign in assignArr
-        for name, upperAssign of upperAssigns
-            if name of assigns and assigns[name][0].scope_level - upperAssign.scope_level >= @rule.scopeDiff
+        for name, upper of upperAssigns
+            if name of assigns and filter(assigns[name][0], upper)
                 errors.push
                     variable: name
-                    upper: upperAssign
+                    upper: upper
                     lower: assigns[name][0]
-            else assigns[name] = upperAssign
+            else assigns[name] = upper
         for name, assignArr of assigns
             if Array.isArray(assignArr) then assigns[name] = assignArr[assignArr.length - 1]
-        errors = errors.concat(@lintNode(code.body, assigns, level + 1)) for code in codes
+        errors = errors.concat(@lintNode(code.body, assigns, filter, level + 1)) for code in codes
         errors
 
     nodeCodes: (node) ->

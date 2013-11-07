@@ -54,10 +54,12 @@ suite 'lintNode().', ->
             assert.equal @errors[0].upper.locationData.first_line, 1
             assert.equal @errors[0].lower.locationData.first_line, 4
 
-    suite 'ScopeDiff.', ->
+    suite 'Filter.', ->
         setup -> 
-            @rule.rule.scopeDiff = 2
-            @errors = @getFixtureErrors 'level'
+            source = fs.readFileSync("#{__dirname}/fixture/level.coffee").toString()
+            ast = CoffeeScript.nodes source
+            @rule.lintNode ast, {}, (lower, upper) ->
+                lower.scope_level - upper.scope_level >= 2
 
         test 'Applies value from config', ->
             assert.equal @errors.length, 1

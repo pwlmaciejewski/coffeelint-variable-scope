@@ -8,12 +8,14 @@
       name: 'variable_scope',
       level: 'warn',
       message: 'Outer scope variable overwrite',
-      description: 'To never overwrite outer scope variable by accident'
+      description: 'To never overwrite outer scope variable by accident',
+      scopeDiff: 1
     };
 
     VariableScopeRule.prototype.lintAST = function(node, astApi) {
-      var error, errors, _i, _len;
-      errors = this.lintNode(node, {});
+      var config, error, errors, _i, _len;
+      config = astApi.config[this.rule.name];
+      errors = this.lintNode(node, {}, this.scopeDiffFilter(config.scopeDiff));
       for (_i = 0, _len = errors.length; _i < _len; _i++) {
         error = errors[_i];
         this.errors.push(astApi.createError({
@@ -25,11 +27,20 @@
       return false;
     };
 
-    VariableScopeRule.prototype.lintNode = function(node, upperAssigns, level) {
-      var assign, assignArr, assigns, code, codes, errors, name, upperAssign, _i, _j, _len, _len1;
+    VariableScopeRule.prototype.scopeDiffFilter = function(diff) {
+      return function(lower, upper) {
+        return lower.scope_level - upper.scope_level >= diff;
+      };
+    };
+
+    VariableScopeRule.prototype.lintNode = function(node, upperAssigns, filter, level) {
+      var assign, assignArr, assigns, code, codes, errors, name, upper, _i, _j, _len, _len1;
       if (level == null) {
         level = 1;
       }
+      filter = filter || function() {
+        return true;
+      };
       errors = [];
       codes = this.nodeCodes(node);
       assigns = this.nodeAssigns(node);
@@ -41,15 +52,15 @@
         }
       }
       for (name in upperAssigns) {
-        upperAssign = upperAssigns[name];
-        if (name in assigns) {
+        upper = upperAssigns[name];
+        if (name in assigns && filter(assigns[name][0], upper)) {
           errors.push({
             variable: name,
-            upper: upperAssign,
+            upper: upper,
             lower: assigns[name][0]
           });
         } else {
-          assigns[name] = upperAssign;
+          assigns[name] = upper;
         }
       }
       for (name in assigns) {
@@ -60,7 +71,7 @@
       }
       for (_j = 0, _len1 = codes.length; _j < _len1; _j++) {
         code = codes[_j];
-        errors = errors.concat(this.lintNode(code.body, assigns, level + 1));
+        errors = errors.concat(this.lintNode(code.body, assigns, filter, level + 1));
       }
       return errors;
     };
