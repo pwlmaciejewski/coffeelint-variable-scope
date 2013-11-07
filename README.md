@@ -1,8 +1,7 @@
 coffeelint-variable-scope
 =========================
 
-[CoffeeLint](http://www.coffeelint.org/) rule that warns you when you accidentally 
-overwrite outer scope variable.
+[CoffeeLint](http://www.coffeelint.org/) rule that warns you about overwriting outer scope variable.
 
 ```
   ✗ ./level.coffee
@@ -15,7 +14,9 @@ overwrite outer scope variable.
 
 ## Installation
 
-`npm install coffeelint-variable-scope`
+```
+npm install coffeelint-variable-scope
+```
 
 ## Usage
 
@@ -30,9 +31,11 @@ Put this in your coffeelint config:
 
 ## Options
 
-`**scopeDiff**` - Reports an error if upper and lower variable 
+**`scopeDiff`** - Reports an error if upper and lower variable 
 assign scope level difference is equal/bigger than `scopeDiff`. Default: 1.
 
 ## Test
 
-`npm test`
+```
+npm test
+```
