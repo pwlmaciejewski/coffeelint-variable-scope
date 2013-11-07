@@ -1,15 +1,18 @@
 fs = require 'fs'
 assert = require('chai').assert
+sinon = require 'sinon'
 CoffeeScript = require 'coffee-script'
 Rule = require '../index.coffee'
+
+getFixtureAST = (fixture) ->
+    source = fs.readFileSync("#{__dirname}/fixture/#{fixture}.coffee").toString()
+    CoffeeScript.nodes source
 
 suite 'lintNode().', ->
     setup ->
         @rule = new Rule()
         @getFixtureErrors = (fixture) =>
-            source = fs.readFileSync("#{__dirname}/fixture/#{fixture}.coffee").toString()
-            ast = CoffeeScript.nodes source
-            @rule.lintNode ast
+            @rule.lintNode getFixtureAST(fixture)
 
     suite 'Basic example.', ->
         setup -> @errors = @getFixtureErrors 'basic'
@@ -56,11 +59,31 @@ suite 'lintNode().', ->
 
     suite 'Filter.', ->
         setup -> 
-            source = fs.readFileSync("#{__dirname}/fixture/level.coffee").toString()
-            ast = CoffeeScript.nodes source
+            ast = getFixtureAST 'level'
             @rule.lintNode ast, {}, (lower, upper) ->
                 lower.scope_level - upper.scope_level >= 2
 
         test 'Applies value from config', ->
             assert.equal @errors.length, 1
             
+suite 'lintAST().', ->
+    setup: ->
+        @rule = new Rule()
+        
+    suite 'Scope diff config option.', ->
+        setup ->
+            @ast = getFixtureAST 'level'
+            @astApi = 
+                createError: ->
+                config:
+                    'variable_scope':
+                        scopeDiff: 2 
+            sinon.stub @rule, 'scopeDiffFilter'
+            @rule.errors = []
+            @rule.lintAST @ast, @astApi
+
+        teardown ->
+            @rule.scopeDiffFilter.restore()
+
+        test 'Generates filter using config variable', ->
+            assert.equal @rule.scopeDiffFilter.getCall(0).args[0], 2
