@@ -1,7 +1,7 @@
 coffeelint-variable-scope
 =========================
 
-[http://www.coffeelint.org/](CoffeeLint) rule that warns you when you accidentally 
+[CoffeeLint](http://www.coffeelint.org/) rule that warns you when you accidentally 
 overwrite outer scope variable.
 
 ```
