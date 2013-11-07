@@ -4,6 +4,7 @@ module.exports = class VariableScopeRule
         level : 'warn'
         message : 'Outer scope variable overwrite'
         description : 'To never overwrite outer scope variable by accident'
+        scopeDiff: 1
 
     lintAST: (node, astApi) ->
         errors = @lintNode node, {}
@@ -21,7 +22,7 @@ module.exports = class VariableScopeRule
         for name, assignArr of assigns
             assign.scope_level = level for assign in assignArr
         for name, upperAssign of upperAssigns
-            if name of assigns 
+            if name of assigns and assigns[name][0].scope_level - upperAssign.scope_level >= @rule.scopeDiff
                 errors.push
                     variable: name
                     upper: upperAssign

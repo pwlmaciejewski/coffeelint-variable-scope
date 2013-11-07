@@ -6,12 +6,13 @@ Rule = require '../index.coffee'
 suite 'lintNode().', ->
     setup ->
         @rule = new Rule()
+        @getFixtureErrors = (fixture) =>
+            source = fs.readFileSync("#{__dirname}/fixture/#{fixture}.coffee").toString()
+            ast = CoffeeScript.nodes source
+            @rule.lintNode ast
 
     suite 'Basic example.', ->
-        setup ->
-            source = fs.readFileSync("#{__dirname}/fixture/basic.coffee").toString()
-            ast = CoffeeScript.nodes source
-            @errors = @rule.lintNode ast
+        setup -> @errors = @getFixtureErrors 'basic'
 
         test 'There are three errors', ->
             assert.equal @errors.length, 3
@@ -35,29 +36,29 @@ suite 'lintNode().', ->
             assert.equal @errors[2].lower.scope_level, 4
 
     suite 'Object literal.', ->
-        setup ->
-            source = fs.readFileSync("#{__dirname}/fixture/objectLiteral.coffee").toString()
-            ast = CoffeeScript.nodes source
-            @errors = @rule.lintNode ast
+        setup -> @errors = @getFixtureErrors 'objectLiteral'
 
         test 'There is only one error', ->
             assert.equal @errors.length, 1
 
     suite 'Object property.', ->
-        setup ->
-            source = fs.readFileSync("#{__dirname}/fixture/objectProperty.coffee").toString()
-            ast = CoffeeScript.nodes source
-            @errors = @rule.lintNode ast
+        setup -> @errors = @getFixtureErrors 'objectProperty'
 
         test 'There is only one error', ->
             assert.equal @errors.length, 1
 
     suite 'Last upper and first lower.', ->
-        setup ->
-            source = fs.readFileSync("#{__dirname}/fixture/lastUpperFirstLower.coffee").toString()
-            ast = CoffeeScript.nodes source
-            @errors = @rule.lintNode ast
+        setup -> @errors = @getFixtureErrors 'lastUpperFirstLower'
 
         test 'Shows correctly', ->
             assert.equal @errors[0].upper.locationData.first_line, 1
             assert.equal @errors[0].lower.locationData.first_line, 4
+
+    suite 'ScopeDiff.', ->
+        setup -> 
+            @rule.rule.scopeDiff = 2
+            @errors = @getFixtureErrors 'level'
+
+        test 'Applies value from config', ->
+            assert.equal @errors.length, 1
+            
