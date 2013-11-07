@@ -7,7 +7,7 @@ coffeelint-variable-scope
   ✗ ./level.coffee
      ⚡ #1-8: Outer scope variable overwrite. a.
 
-✗ Lint! » 2 errors and 1 warning in 1 file
+✗ Lint! » 2 errors and 1 warning in 2 files
 ```
 
 **Means**: Variable `a` assigned in `1st` line and overwriten in `8th` line of `level.coffee` file.
@@ -31,8 +31,8 @@ Put this in your coffeelint config:
 
 ## Options
 
-**`scopeDiff`** - Reports an error if upper and lower variable 
-assign scope level difference is equal/bigger than `scopeDiff`. Default: 1.
+`scopeDiff` - Reports an error if upper and lower variable 
+assign scope level difference is equal/bigger than `scopeDiff`. Default: `1`.
 
 ## Test
 

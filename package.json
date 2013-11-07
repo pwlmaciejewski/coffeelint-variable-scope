@@ -13,7 +13,9 @@
   "keywords": [
     "coffeelint",
     "coffeescript",
-    "scope"
+    "scope",
+    "shadowing",
+    "coffee"
   ],
   "author": "Paweł Maciejewski <fragphace@gmail.com>",
   "license": "MIT",
