@@ -12,6 +12,7 @@
   },
   "keywords": [
     "coffeelint",
+    "coffeelintrule",
     "coffeescript",
     "scope",
     "shadowing",
