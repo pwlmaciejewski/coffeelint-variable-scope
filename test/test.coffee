@@ -65,6 +65,13 @@ suite 'lintNode().', ->
 
         test 'Applies value from config', ->
             assert.equal @errors.length, 1
+
+    suite 'Ignore errors with special comment', ->
+        setup -> 
+            @errors = @getFixtureErrors 'ignoreComment'
+
+        test 'There are two errors.', ->
+            assert.equal @errors.length, 2
             
 suite 'lintAST().', ->
     setup: ->
