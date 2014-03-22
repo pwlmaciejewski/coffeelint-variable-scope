@@ -49,7 +49,7 @@ will not produce any coffeelint errors:
 Notes:
 
 * It needs to be a **block** comment
-* It will ignore next **assignment** (not line)
+* It will ignore the next **assignment** (not line) in the code block
 
 ## Test
 
