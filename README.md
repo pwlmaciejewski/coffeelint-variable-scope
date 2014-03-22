@@ -57,7 +57,7 @@ Notes:
 npm test
 ```
 
-## Chancelog
+## Changelog
 
 `0.0.2` `Future`
 
