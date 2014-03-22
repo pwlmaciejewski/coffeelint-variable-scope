@@ -1,6 +1,7 @@
 fs = require 'fs'
 assert = require('chai').assert
 sinon = require 'sinon'
+_ = require 'underscore'
 CoffeeScript = require 'coffee-script'
 Rule = require '../index.coffee'
 
@@ -66,12 +67,19 @@ suite 'lintNode().', ->
         test 'Applies value from config', ->
             assert.equal @errors.length, 1
 
-    suite 'Ignore errors with special comment', ->
-        setup -> 
-            @errors = @getFixtureErrors 'ignoreComment'
+    test 'Ignore errors with special comment', ->
+        errors = @getFixtureErrors 'ignoreComment'
+        assert.equal errors.length, 2
 
-        test 'There are two errors.', ->
+    suite 'Destructuring assignments', ->
+        setup ->
+            @errors = @getFixtureErrors 'destructuringAssignments'
+
+        test 'There should be only 2 errors', ->
             assert.equal @errors.length, 2
+
+        test 'Errors should consider `a` and `f` variables', ->
+            assert.deepEqual _.pluck(@errors, 'variable'), ['a', 'f']
             
 suite 'lintAST().', ->
     setup: ->

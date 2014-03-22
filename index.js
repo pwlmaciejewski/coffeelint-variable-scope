@@ -96,6 +96,7 @@
       ignoreNext = false;
       node.traverseChildren(false, (function(_this) {
         return function(child) {
+          var name, v, variables, _i, _len, _results;
           switch (child.constructor.name) {
             case 'Assign':
               if (child.variable.properties.length) {
@@ -107,10 +108,18 @@
               if (ignoreNext) {
                 return ignoreNext = false;
               }
-              if (!assigns[_this.assignName(child)]) {
-                assigns[_this.assignName(child)] = [];
+              variables = !!child.variable.base.objects ? child.variable.base.objects : [child.variable];
+              _results = [];
+              for (_i = 0, _len = variables.length; _i < _len; _i++) {
+                v = variables[_i];
+                name = v.base.value;
+                if (!assigns[name]) {
+                  assigns[name] = [];
+                }
+                _results.push(assigns[name].push(child));
               }
-              return assigns[_this.assignName(child)].push(child);
+              return _results;
+              break;
             case 'Comment':
               if (child.comment.match(/coffeelint-variable-scope-ignore/)) {
                 return ignoreNext = true;
@@ -119,10 +128,6 @@
         };
       })(this));
       return assigns;
-    };
-
-    VariableScopeRule.prototype.assignName = function(assign) {
-      return assign.variable.base.value;
     };
 
     return VariableScopeRule;

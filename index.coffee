@@ -53,10 +53,12 @@ module.exports = class VariableScopeRule
                     if child.variable.properties.length then return
                     if child.context is 'object' then return
                     if ignoreNext then return ignoreNext = false
-                    unless assigns[@assignName(child)] then assigns[@assignName(child)] = []
-                    assigns[@assignName(child)].push child
+                    variables = if !!child.variable.base.objects then child.variable.base.objects # destructuring assign 
+                    else [child.variable]
+                    for v in variables
+                        name = v.base.value
+                        assigns[name] = [] unless assigns[name]
+                        assigns[name].push child
                 when 'Comment'
                     if child.comment.match /coffeelint-variable-scope-ignore/ then ignoreNext = true
         assigns
-
-    assignName: (assign) -> assign.variable.base.value

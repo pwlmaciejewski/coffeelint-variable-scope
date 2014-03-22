@@ -30,6 +30,7 @@
     "chai": "~1.8.1",
     "mocha": "~1.14.0",
     "coffee-script": "~1.6.3",
-    "sinon": "~1.7.3"
+    "sinon": "~1.7.3",
+    "underscore": "^1.6.0"
   }
 }
