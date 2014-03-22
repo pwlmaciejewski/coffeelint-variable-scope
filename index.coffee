@@ -46,12 +46,17 @@ module.exports = class VariableScopeRule
 
     nodeAssigns: (node) ->
         assigns = {}
+        ignoreNext = false
         node.traverseChildren false, (child) =>
-            if child.constructor.name isnt 'Assign' then return
-            if child.context is 'object' then return
-            if child.variable.properties.length then return
-            unless assigns[@assignName(child)] then assigns[@assignName(child)] = []
-            assigns[@assignName(child)].push child
+            switch child.constructor.name
+                when 'Assign'
+                    if child.variable.properties.length then return
+                    if child.context is 'object' then return
+                    if ignoreNext then return ignoreNext = false
+                    unless assigns[@assignName(child)] then assigns[@assignName(child)] = []
+                    assigns[@assignName(child)].push child
+                when 'Comment'
+                    if child.comment.match /coffeelint-variable-scope-ignore/ then ignoreNext = true
         assigns
 
     assignName: (assign) -> assign.variable.base.value

@@ -8,6 +8,8 @@ foo = ->
 foo = ->
   c = 2
   bar = ->
-    b = 3 # coffeelint-variable-scope-ignore
+    ###coffeelint-variable-scope-ignore###
+    b = 3 
     baz = ->
+        ###just some comment###
         c = 4

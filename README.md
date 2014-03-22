@@ -34,8 +34,35 @@ Put this in your coffeelint config:
 `scopeDiff` - Reports an error if upper and lower variable 
 assign scope level difference is equal/bigger than `scopeDiff`. Default: `1`.
 
+## Ignore errors
+
+You can "bless" certain assignments as intentional via a special 
+`coffeelint-variable-scope-ignore` annotation in code. Below code
+will not produce any coffeelint errors:
+
+```
+    a = 1
+    ###coffeelint-variable-scope-ignore###
+    a = 2
+```
+
+Notes:
+
+* It needs to be a **block** comment
+* It will ignore next **assignment** (not line)
+
 ## Test
 
 ```
 npm test
 ```
+
+## Chancelog
+
+`0.0.2` `Future`
+
+* Added `coffeelint-variable-scope-ingore` blessing
+* Bug fixes
+
+`0.0.1` `2013-11-07` 
+Initial release
