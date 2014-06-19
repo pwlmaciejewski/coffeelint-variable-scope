@@ -71,15 +71,20 @@ suite 'lintNode().', ->
         errors = @getFixtureErrors 'ignoreComment'
         assert.equal errors.length, 2
 
+    test 'Object literal error', ->
+        ast = CoffeeScript.nodes '{ a: x, b: y } = { a: 0, b: 1 }'
+        assert.doesNotThrow =>
+            @rule.lintNode ast
+
     suite 'Destructuring assignments', ->
         setup ->
             @errors = @getFixtureErrors 'destructuringAssignments'
 
-        test 'There should be only 2 errors', ->
-            assert.equal @errors.length, 2
+        test 'There should be only 3 errors', ->
+            assert.equal @errors.length, 3
 
-        test 'Errors should consider `a` and `f` variables', ->
-            assert.deepEqual _.pluck(@errors, 'variable'), ['a', 'f']
+        test 'Errors should consider `a`, `d` and `f` variables', ->
+            assert.deepEqual _.pluck(@errors, 'variable'), ['d', 'a', 'f']
             
 suite 'lintAST().', ->
     setup: ->
