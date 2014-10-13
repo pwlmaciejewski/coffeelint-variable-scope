@@ -1,6 +1,6 @@
 {
   "name": "coffeelint-variable-scope",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CoffeeLint rule that warn you when you accidentally overwrite outer scope variable",
   "main": "index.js",
   "scripts": {

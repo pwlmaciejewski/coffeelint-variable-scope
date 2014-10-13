@@ -1,7 +1,20 @@
-# coffeelint-variable-scope [![Build Status](https://secure.travis-ci.org/fragphace/coffeelint-variable-scope.png?branch=master)](http://travis-ci.org/fragphace/coffeelint-variable-scope)
+# coffeelint-variable-scope [![NPM version](https://badge.fury.io/js/coffeelint-variable-scope.svg)](http://badge.fury.io/js/coffeelint-variable-scope) [![Build Status](https://secure.travis-ci.org/fragphace/coffeelint-variable-scope.png?branch=master)](http://travis-ci.org/fragphace/coffeelint-variable-scope)
 
+<table>
+<tr> 
+<td>Package</td><td>coffeelint-variable-scope</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>[CoffeeLint](http://www.coffeelint.org/) rule that warns you about overwriting outer scope variable.</td>
+</tr>
+<tr>
+<td>Node Version</td>
+<td>>= 0.10</td>
+</tr>
+</table>
 
-[CoffeeLint](http://www.coffeelint.org/) rule that warns you about overwriting outer scope variable.
+## Example
 
 ```
   ✗ ./level.coffee
@@ -59,7 +72,7 @@ npm test
 
 ## Changelog
 
-`0.0.2` `Future`
+`0.0.2` `2014-10-13`
 
 * Added `coffeelint-variable-scope-ingore` blessing
 * Bug fixes
