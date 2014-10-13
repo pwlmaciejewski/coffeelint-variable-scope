@@ -6,7 +6,7 @@
 </tr>
 <tr>
 <td>Description</td>
-<td>[CoffeeLint](http://www.coffeelint.org/) rule that warns you about overwriting outer scope variable.</td>
+<td>CoffeeLint rule that warns you about overwriting outer scope variable.</td>
 </tr>
 <tr>
 <td>Node Version</td>
