@@ -56,7 +56,11 @@ module.exports = class VariableScopeRule
                     variables = if !!child.variable.base.objects then child.variable.base.objects # destructuring assign 
                     else [child.variable]
                     for v in variables
-                        name = if v.variable then v.value.base.value else v.base.value
+                        base = if v.name then v.name.base
+                        else if v.value then v.value.base
+                        else v.base
+
+                        name = base.value
                         assigns[name] = [] unless assigns[name]
                         assigns[name].push child
                 when 'Comment'

@@ -85,6 +85,11 @@ suite 'lintNode().', ->
 
         test 'Errors should consider `a`, `d` and `f` variables', ->
             assert.deepEqual _.pluck(@errors, 'variable'), ['d', 'a', 'f']
+
+    test 'Destructuring assignment with splats', ->
+        ast = CoffeeScript.nodes "[ foo, bar... ] = baz.split ''"
+        assert.doesNotThrow =>
+            @rule.lintNode ast
             
 suite 'lintAST().', ->
     setup: ->
