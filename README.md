@@ -1,4 +1,4 @@
-# coffeelint-variable-scope [![NPM version](https://badge.fury.io/js/coffeelint-variable-scope.svg)](http://badge.fury.io/js/coffeelint-variable-scope) [![Build Status](https://secure.travis-ci.org/fragphace/coffeelint-variable-scope.png?branch=master)](http://travis-ci.org/fragphace/coffeelint-variable-scope)
+# coffeelint-variable-scope [![NPM version](https://badge.fury.io/js/coffeelint-variable-scope.svg)](http://badge.fury.io/js/coffeelint-variable-scope) [![Build Status](https://secure.travis-ci.org/pwlmaciejewski/coffeelint-variable-scope.png?branch=master)](http://travis-ci.org/pwlmaciejewski/coffeelint-variable-scope)
 
 <table>
 <tr> 
