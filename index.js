@@ -94,7 +94,7 @@
       assigns = {};
       ignoreNext = false;
       node.traverseChildren(false, function(child) {
-        var name, v, variables, _i, _len, _results;
+        var base, name, v, variables, _i, _len, _results;
         switch (child.constructor.name) {
           case 'Assign':
             if (child.variable.properties.length) {
@@ -110,7 +110,8 @@
             _results = [];
             for (_i = 0, _len = variables.length; _i < _len; _i++) {
               v = variables[_i];
-              name = v.variable ? v.value.base.value : v.base.value;
+              base = v.name ? v.name.base : v.value ? v.value.base : v.base;
+              name = base.value;
               if (!assigns[name]) {
                 assigns[name] = [];
               }
